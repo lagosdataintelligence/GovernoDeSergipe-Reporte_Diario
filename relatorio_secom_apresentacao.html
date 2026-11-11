@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Radar Diário de Reputação · Governo de Sergipe | SECOM</title>
+  
+  <!-- Fontes Oficiais -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN TOKENS & ESTILOS GLOBAIS AUTOSSUFICIENTES (LAGOS DATA INTELLIGENCE)
+       Visual moderno, responsivo, nítido em Desktop e Mobile.
+       ========================================================================== */
+    :root {
+      --ind: #252375;
+      --ind-2: #2E2C80;
+      --ind-3: #3B3990;
+      --ind-4: #4D4B9E;
+      --ind-d: #1D1B5E;
+      --ind-deep: #151347;
+      --mag: #FF005A;
+      --mag-h: #E0004F;
+      --cy: #00F3FF;
+      --lav: #D2D1F9;
+      --lav-2: #B9B8E0;
+      --ice: #F4F4FA;
+      --pos: #00F3FF;
+      --neg: #FF005A;
+      --neu: #B9B8E0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--ind-deep);
+      color: var(--ice);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      padding: 20px 0 40px 0;
+    }
+
+    /* PADRONIZAÇÃO TIPOGRÁFICA GLOBAL: Todos os botões herdam Space Grotesk */
+    button, input, select, textarea {
+      font-family: inherit;
+    }
+
+    /* CONTAINER CENTRAL E MARGENS DEFINITIVAS - FORMATO A4 EXECUTIVO */
+    .container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* CABEÇALHO INSTITUCIONAL ENQUADRADO */
+    .header-wrapper {
+      background-color: var(--ind-d);
+      background-image:
+        radial-gradient(circle at 88% 12%, rgba(0, 243, 255, 0.14) 0%, transparent 42%),
+        radial-gradient(circle at 12% 88%, rgba(255, 0, 90, 0.12) 0%, transparent 38%),
+        radial-gradient(circle at 50% 50%, rgba(59, 57, 144, 0.28) 0%, transparent 60%);
+      border: 1px solid var(--ind-3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+      position: relative;
+    }
+
+    .header-top {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .kicker {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--mag);
+      background-color: var(--ind-deep);
+      padding: 2px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 0, 90, 0.35);
+      margin-bottom: 3px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 11.5px;
+      color: var(--lav-2);
+      margin-top: 3px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      background-color: var(--ind-2);
+      color: #FFFFFF;
+      border: 1px solid var(--ind-4);
+    }
+
+    .btn-action:hover {
+      background-color: var(--ind-3);
+      border-color: var(--lav-2);
+    }
+
+    .badge-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      background-color: var(--ind-deep);
+      color: var(--cy);
+      border: 1px solid rgba(0, 243, 255, 0.4);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--cy);
+      box-shadow: 0 0 8px var(--cy);
+    }
+
+    /* BARRA DE METADADOS */
+    .meta-bar {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--ind-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 10.5px;
+      color: var(--lav-2);
+    }
+
+    .meta-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* SEÇÕES E GRIDS */
+    main.main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background-color: var(--ind-2);
+      border: 1px solid var(--ind-3);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .card-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--lav-2);
+      display: block;
+    }
+
+    .kpi-big {
+      font-size: 24px;
+      font-weight: 900;
+      color: #FFFFFF;
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+
+    .kpi-unit {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--lav-2);
+    }
+
+    .card-desc {
+      font-size: 10.5px;
+      color: var(--lav-2);
+      margin-top: 4px;
+    }
+
+    /* CARD DO IRG ESPECÍFICO */
+    .card-irg {
+      border-width: 2px;
+    }
+
+    .irg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .badge-irg {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      border: 1px solid transparent;
+    }
+
+    .gauge-wrap {
+      margin-top: 12px;
+    }
+
+    .gauge-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--lav-2);
+      margin-bottom: 3px;
+    }
+
+    .gauge-track {
+      width: 100%;
+      height: 8px;
+      background-color: var(--ind-d);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid var(--ind-4);
+    }
+
+    .gauge-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.8s ease;
+    }
+
+    .irg-diag {
+      font-size: 10px;
+      color: var(--ice);
+      margin-top: 8px;
+      line-height: 1.35;
+    }
+
+    /* SÍNTESE EXECUTIVA & DIRECIONAMENTOS */
+    .two-cols-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .section-icon {
+      font-size: 14px;
+      background-color: var(--ind-d);
+      padding: 6px;
+      border-radius: 10px;
+      border: 1px solid var(--ind-3);
+    }
+
+    .section-h2 {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .section-sub {
+      font-size: 11px;
+      color: var(--lav-2);
+    }
+
+    .bullet-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background-color: rgba(29, 27, 94, 0.7);
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--ind-3);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .bullet-icon-pos { color: var(--pos); font-weight: bold; font-size: 13px; }
+    .bullet-icon-neg { color: var(--neg); font-weight: bold; font-size: 13px; }
+    .bullet-icon-mag { color: var(--mag); font-weight: bold; font-size: 13px; }
+
+    /* SEÇÃO DESTAQUES DE BROADCAST (RÁDIO E TELEVISÃO) */
+    .bcast-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .bcast-card {
+      background-color: var(--ind-d);
+      border: 1px solid var(--ind-3);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* BARRA DE FILTROS & BUSCA PADRONIZADA */
+    .filter-card {
+      background-color: var(--ind-2);
+      border: 1px solid var(--ind-3);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 260px;
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--ind-d);
+      border: 1px solid var(--ind-4);
+      border-radius: 10px;
+      padding: 7px 12px 7px 30px;
+      color: #FFFFFF;
+      font-size: 11px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--cy);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      font-size: 11px;
+      color: var(--lav-2);
+    }
+
+    .filter-groups {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--ind-3);
+    }
+
+    .btn-filter {
+      background-color: transparent;
+      border: 1px solid var(--ind-4);
+      color: var(--lav-2);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-filter:hover {
+      color: #FFFFFF;
+      border-color: var(--lav-2);
+    }
+
+    .btn-filter.active-canal {
+      background-color: var(--mag);
+      border-color: var(--mag);
+      color: #FFFFFF;
+    }
+
+    .btn-filter.active-sent {
+      background-color: var(--ind-4);
+      border-color: var(--ind-4);
+      color: #FFFFFF;
+    }
+
+    /* GRID DO FEED DE MENÇÕES */
+    .mencoes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .mencao-card {
+      background-color: var(--ind-2);
+      border: 1px solid var(--ind-3);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .mencao-card:hover {
+      border-color: var(--ind-4);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-channel {
+      background-color: var(--ind-d);
+      color: var(--cy);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+    }
+
+    .badge-sec {
+      background-color: var(--ind-d);
+      color: var(--lav-2);
+      border: 1px solid var(--ind-4);
+    }
+
+    .badge-gov-pos {
+      background-color: rgba(0, 243, 255, 0.15);
+      color: var(--pos);
+      border: 1px solid rgba(0, 243, 255, 0.4);
+    }
+
+    .badge-gov-neg {
+      background-color: rgba(255, 0, 90, 0.15);
+      color: var(--neg);
+      border: 1px solid rgba(255, 0, 90, 0.4);
+    }
+
+    .badge-gov-neu {
+      background-color: var(--ind-d);
+      color: var(--ice);
+      border: 1px solid var(--ind-4);
+    }
+
+    .author-title {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 2px;
+    }
+
+    .program-sub {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--lav-2);
+    }
+
+    .post-time {
+      font-size: 10px;
+      color: var(--lav-2);
+      display: block;
+      margin-top: 1px;
+    }
+
+    .badge-sentiment {
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 10px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .badge-pos {
+      background-color: rgba(0, 243, 255, 0.15);
+      color: var(--pos);
+      border: 1px solid rgba(0, 243, 255, 0.4);
+    }
+
+    .badge-neg {
+      background-color: rgba(255, 0, 90, 0.15);
+      color: var(--neg);
+      border: 1px solid rgba(255, 0, 90, 0.4);
+    }
+
+    .badge-neu {
+      background-color: var(--ind-d);
+      color: var(--lav-2);
+      border: 1px solid var(--ind-4);
+    }
+
+    /* SÍNTESE EXECUTIVA DE CONTEÚDO */
+    .content-summary-box {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--ind-4);
+      border-left: 3px solid var(--cy);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 8px 0;
+    }
+
+    .content-summary-box.bcast-summary {
+      border-left-color: var(--mag);
+      background-color: rgba(255, 0, 90, 0.04);
+    }
+
+    .summary-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--cy);
+      margin-bottom: 3px;
+    }
+
+    .bcast-summary .summary-badge {
+      color: var(--mag);
+    }
+
+    .content-summary-text {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: #FFFFFF;
+      margin: 0;
+    }
+
+    /* EXPANSÃO DO TEXTO ORIGINAL */
+    .raw-toggle {
+      margin-top: 6px;
+    }
+
+    .raw-toggle-btn {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--lav-2);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+
+    .raw-toggle-btn:hover {
+      color: var(--cy);
+    }
+
+    .raw-text-content {
+      font-size: 10px;
+      line-height: 1.4;
+      color: var(--lav-2);
+      background-color: rgba(0, 0, 0, 0.25);
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin-top: 4px;
+      border-left: 2px solid var(--ind-4);
+      font-style: italic;
+      word-break: break-word;
+    }
+
+    /* PLAYERS MULTIMÍDIA */
+    .player-box {
+      margin-top: 8px;
+      padding: 8px 10px;
+      background-color: var(--ind-d);
+      border-radius: 12px;
+      border: 1px solid var(--ind-3);
+    }
+
+    .btn-play-external {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background-color: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--ind-4);
+      color: var(--cy);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 3px 8px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-play-external:hover {
+      background-color: var(--mag);
+      border-color: var(--mag);
+      color: #FFFFFF;
+    }
+
+    .audio-native {
+      width: 100%;
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    .video-native {
+      width: 100%;
+      max-height: 160px;
+      border-radius: 10px;
+      background-color: #000;
+    }
+
+    /* RODAPÉ DO CARD */
+    .card-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--ind-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 10.5px;
+      color: var(--lav-2);
+    }
+
+    .footer-metrics {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .footer-metrics strong {
+      color: #FFFFFF;
+    }
+
+    .badge-val {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--cy);
+      background-color: var(--ind-d);
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+    }
+
+    .link-original-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: rgba(0, 243, 255, 0.12);
+      border: 1px solid rgba(0, 243, 255, 0.4);
+      color: var(--cy);
+      font-size: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .link-original-btn:hover {
+      background-color: var(--cy);
+      color: var(--ind-deep);
+      transform: translateY(-1px);
+    }
+
+    /* NAVEGAÇÃO RÁPIDA (ÍNDICE EXECUTIVO) */
+    .quick-nav {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .btn-nav {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ice);
+      background-color: var(--ind-d);
+      border: 1px solid var(--ind-4);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-nav:hover {
+      background-color: var(--ind-3);
+      border-color: var(--cy);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .btn-nav.active-nav {
+      border-color: rgba(0, 243, 255, 0.5);
+      color: var(--cy);
+      background-color: rgba(0, 243, 255, 0.08);
+    }
+
+    /* RODAPÉ INSTITUCIONAL ENQUADRADO */
+    footer.page-footer {
+      margin-top: 24px;
+      background-color: var(--ind-d);
+      border: 1px solid var(--ind-3);
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 10.5px;
+      color: var(--lav-2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+    }
+
+    .footer-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    /* REGRAS DE RESPONSIVIDADE (MOBILE & TABLET) */
+    @media (max-width: 820px) {
+      .container {
+        padding: 0 12px;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .two-cols-grid {
+        grid-template-columns: 1fr;
+      }
+      .bcast-grid {
+        grid-template-columns: 1fr;
+      }
+      .mencoes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 12px 0 30px 0;
+      }
+      .header-wrapper {
+        padding: 14px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+      }
+      .header-title {
+        font-size: 16px;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .kpi-big {
+        font-size: 22px;
+      }
+      .card {
+        padding: 12px;
+        border-radius: 14px;
+      }
+      footer.page-footer {
+        padding: 12px;
+        border-radius: 12px;
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm 12mm;
+      }
+      .no-print { display: none !important; }
+      body {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        padding: 0 !important;
+        font-size: 9pt !important;
+      }
+      .container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .header-wrapper, footer.page-footer, .card, .bcast-card, .mencao-card, .coment-card {
+        background-color: #FFFFFF !important;
+        border: 1px solid #D0D0D0 !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+        border-radius: 8px !important;
+        background-image: none !important;
+        padding: 10px 12px !important;
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+      .header-title { font-size: 14pt !important; color: #000000 !important; }
+      .kpi-big { font-size: 16pt !important; color: #000000 !important; }
+      .section-h2 { font-size: 10.5pt !important; color: #000000 !important; }
+      .author-title { font-size: 9.5pt !important; color: #000000 !important; }
+      .content-summary-text, .bullet-item { font-size: 8pt !important; color: #222222 !important; }
+      .card-desc, .section-sub, .post-time, .footer-metrics { font-size: 7.5pt !important; color: #555555 !important; }
+      .link-original-btn, .btn-action, .btn-nav, .btn-filter { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container report-container">
+
+    <!-- CABEÇALHO INSTITUCIONAL -->
+    <header class="header-wrapper">
+      <div class="header-top">
+        <div class="brand-area">
+          <img src="assets/logo-lagos.png" alt="Lagos Data Intelligence" class="brand-logo">
+          <div>
+            <span class="kicker">Inteligência Governamental · SECOM</span>
+            <h1 class="header-title">Radar Diário de Reputação</h1>
+            <p class="header-subtitle">
+              Governo do Estado de Sergipe · Monitoramento Integrado Multimodal: Redes Sociais, Noticiário, Rádios e Televisão
+            </p>
+          </div>
+        </div>
+
+        <div class="header-actions no-print">
+          <button onclick="window.print()" class="btn-action">
+            🖨️ Exportar PDF / Imprimir
+          </button>
+          <div class="badge-live">
+            <span class="pulse-dot"></span>
+            Base Integrada: 1.008 manifestações
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Metadados -->
+      <div class="meta-bar">
+        <div class="meta-items">
+          <span>📅 <strong>Período de Referência:</strong> 20/10 às 17h até 21/10 às 17h (Janela Diária de 24h)</span>
+          <span>🏛️ <strong>Liderança:</strong> Gov. Fábio Mitidieri (71.5% de centralidade)</span>
+          <span>⏱️ <strong>Ciclo Operacional:</strong> Diário (17h às 17h)</span>
+        </div>
+      </div>
+
+      <!-- Menu de Navegação Rápida (Índice Executivo) -->
+      <nav class="quick-nav no-print">
+        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--lav-2); margin-right: 4px;">Índice Executivo:</span>
+        <a href="#secao-visao-geral" class="btn-nav">📊 Visão Geral & IRG</a>
+        <a href="#secao-sintese" class="btn-nav">📌 Síntese Executiva</a>
+        <a href="#secao-broadcast" class="btn-nav">🎙️ Rádios & TV</a>
+        <a href="#secao-comentarios-sociais" class="btn-nav">💬 Comentários do Público</a>
+        <a href="#secao-feed-mencoes" class="btn-nav active-nav">🔎 Destaques de Repercussão</a>
+      </nav>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+    <!-- SEÇÃO 1: CARDS DE KPIS & ÍNDICE IRG -->
+    <section id="secao-visao-geral">
+      <div class="kpi-grid">
+        
+        <!-- CARD IRG -->
+        <div class="card card-irg" style="border-color: #00F3FF;">
+          <div>
+            <div class="irg-header">
+              <span class="card-label">Índice IRG Sergipe</span>
+              <span class="badge-irg" style="background-color: #00F3FF25; color: #00F3FF; border-color: #00F3FF60; white-space: nowrap;">
+                🟢 Percepção Favorável
+              </span>
+            </div>
+            <div class="kpi-big" style="color: #00F3FF;">
+              +34.0 <span class="kpi-unit">/ 100</span>
+            </div>
+          </div>
+
+          <div class="gauge-wrap">
+            <div class="gauge-legend" style="display: flex; justify-content: space-between; font-size: 9.5px; color: var(--lav-2); margin-bottom: 4px; white-space: nowrap;">
+              <span>-100 (Crítico)</span>
+              <span>0 (Neutro)</span>
+              <span>+100 (Excelente)</span>
+            </div>
+            <div class="gauge-track">
+              <div class="gauge-fill" style="width: 67.0%; background-color: #00F3FF;"></div>
+            </div>
+            <p class="irg-diag" style="font-size: 11px; color: var(--ice); margin-top: 8px; line-height: 1.45;">Cenário positivo e estável. Entregas do Governo e engajamento da liderança superam com folga as demandas pontuais.</p>
+          </div>
+        </div>
+
+        <!-- CARD VOLUME & MULTIMODAL (COM COMENTÁRIOS E NOMENCLATURAS OFICIAIS) -->
+        <div class="card">
+          <div>
+            <span class="card-label">Volume Total Monitorado</span>
+            <div class="kpi-big">1.008 <span class="kpi-unit">manifestações</span></div>
+            <p class="card-desc">Redes sociais, notícias, rádio, TV e comentários populares</p>
+          </div>
+
+          <div style="margin-top: 14px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+            <div style="background-color: var(--ind-d); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--ind-4); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 10.5px; color: var(--lav-2); white-space: nowrap;">🎙️ Rádios</span>
+              <strong style="font-size: 11.5px; color: #FFF; white-space: nowrap;">6 áudios</strong>
+            </div>
+            <div style="background-color: var(--ind-d); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--ind-4); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 10.5px; color: var(--lav-2); white-space: nowrap;">📺 Televisão</span>
+              <strong style="font-size: 11.5px; color: #FFF; white-space: nowrap;">13 vídeos</strong>
+            </div>
+            <div style="background-color: var(--ind-d); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--ind-4); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 10.5px; color: var(--lav-2); white-space: nowrap;">📱 Redes Sociais</span>
+              <strong style="font-size: 11.5px; color: #FFF; white-space: nowrap;">622 posts</strong>
+            </div>
+            <div style="background-color: var(--ind-d); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--ind-4); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 10.5px; color: var(--lav-2); white-space: nowrap;">📰 Notícias</span>
+              <strong style="font-size: 11.5px; color: #FFF; white-space: nowrap;">50 matérias</strong>
+            </div>
+            <div style="grid-column: span 2; background-color: var(--ind-d); padding: 8px 12px; border-radius: 12px; border: 1px solid var(--ind-4); display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; color: var(--cy); display: flex; align-items: center; gap: 6px; white-space: nowrap;">
+                💬 <strong>Comentários Auditados</strong>
+              </span>
+              <strong style="font-size: 11.5px; color: var(--cy); white-space: nowrap;">317 interações</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD AUDIÊNCIA & ALCANCE ESTIMADO -->
+        <div class="card">
+          <div>
+            <span class="card-label">Alcance Estimado Total</span>
+            <div class="kpi-big" style="color: var(--cy);">2,0 mi</div>
+            <p class="card-desc">Audiência agregada de ouvintes, telespectadores e leitores</p>
+          </div>
+
+          <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--ind-3); font-size: 11.5px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+              <span style="color: var(--lav-2); white-space: nowrap;">Engajamento Direto:</span>
+              <strong style="color: #FFF; white-space: nowrap;">53,8 mil interações</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+              <span style="color: var(--lav-2); white-space: nowrap;">Média por Publicação:</span>
+              <strong style="color: #FFF; white-space: nowrap;">77.8 interações/post</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD BALANÇO DE PERCEPÇÃO: GRÁFICO DE BARRAS EMPILHADAS (REDES E COMENTÁRIOS) -->
+        <div class="card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <span class="card-label">Balanço da Percepção</span>
+              <div style="display: flex; gap: 8px; font-size: 10px; font-weight: 700; white-space: nowrap;">
+                <span style="color: var(--pos);">🟢 Positivo</span>
+                <span style="color: var(--neg);">🔴 Negativo</span>
+                <span style="color: var(--neu);">🟡 Neutro</span>
+              </div>
+            </div>
+            <p class="card-desc" style="margin-top: 4px;">Comparativo de polaridade por fonte de manifestação</p>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+            
+            <!-- Barra Empilhada 1: Redes Sociais & Noticiário -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; margin-bottom: 4px;">
+                <span style="color: var(--ice); font-weight: 700; white-space: nowrap;">📱 Redes Sociais & Notícias</span>
+                <span style="color: var(--lav-2); font-weight: 600; white-space: nowrap;">
+                  <strong style="color: var(--pos);">57.6%</strong> / 
+                  <strong style="color: var(--neg);">18.5%</strong> / 
+                  <strong style="color: var(--neu);">23.9%</strong>
+                </span>
+              </div>
+              <div style="width: 100%; height: 8px; background-color: var(--ind-d); border-radius: 9999px; overflow: hidden; display: flex; border: 1px solid var(--ind-4);">
+                <div style="width: 57.6%; background-color: var(--pos);" title="Positivo: 57.6%"></div>
+                <div style="width: 18.5%; background-color: var(--neg);" title="Negativo: 18.5%"></div>
+                <div style="width: 23.9%; background-color: var(--neu);" title="Neutro: 23.9%"></div>
+              </div>
+            </div>
+
+            <!-- Barra Empilhada 2: Comentários do Público -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; margin-bottom: 4px;">
+                <span style="color: var(--ice); font-weight: 700; white-space: nowrap;">💬 Comentários do Público</span>
+                <span style="color: var(--lav-2); font-weight: 600; white-space: nowrap;">
+                  <strong style="color: var(--pos);">52.4%</strong> / 
+                  <strong style="color: var(--neg);">23.3%</strong> / 
+                  <strong style="color: var(--neu);">24.3%</strong>
+                </span>
+              </div>
+              <div style="width: 100%; height: 8px; background-color: var(--ind-d); border-radius: 9999px; overflow: hidden; display: flex; border: 1px solid var(--ind-4);">
+                <div style="width: 52.4%; background-color: var(--pos);" title="Positivo: 52.4%"></div>
+                <div style="width: 23.3%; background-color: var(--neg);" title="Negativo: 23.3%"></div>
+                <div style="width: 24.3%; background-color: var(--neu);" title="Neutro: 24.3%"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2: SÍNTESE EXECUTIVA & RECOMENDAÇÕES DA SECOM -->
+    <section class="two-cols-grid" id="secao-sintese">
+      
+      <!-- SÍNTESE EXECUTIVA -->
+      <div class="card">
+        <div>
+          <div class="section-title-wrap">
+            <span class="section-icon">📌</span>
+            <div>
+              <h2 class="section-h2">Síntese Executiva Diária</h2>
+              <p class="section-sub">Diagnóstico estratégico das últimas 24 horas</p>
+            </div>
+          </div>
+
+          <div class="bullet-list">
+            <div class="bullet-item">
+              <span class="bullet-icon-pos">✓</span>
+              <span><strong>Liderança do Governador como Vetor Positivo:</strong> As publicações oficiais do Governador Fábio Mitidieri (quadro "Gov Responde", mobilização comunitária e agendas de governo) geraram forte engajamento favorável, somando 343 manifestações de apoio direto.</span>
+            </div>
+            <div class="bullet-item">
+              <span class="bullet-icon-pos">✓</span>
+              <span><strong>Entregas em Infraestrutura e Emprego:</strong> A liberação da 2ª alça do Complexo Viário Senadora Maria do Carmo Alves e o anúncio de 521 vagas de trabalho na Plataforma GO Sergipe ancoraram a percepção de resolutividade da gestão.</span>
+            </div>
+            <div class="bullet-item">
+              <span class="bullet-icon-neg">!</span>
+              <span><strong>Foco Negativo em Saneamento (DESO / Iguá):</strong> Queixas pontuais sobre desabastecimento em bairros de Aracaju e no interior pautaram ligações de ouvintes no rádio matinal e comentários em publicações públicas.</span>
+            </div>
+            <div class="bullet-item">
+              <span class="bullet-icon-mag">⚡</span>
+              <span><strong>Segurança Pública em Foco:</strong> A decisão administrativa da SSP quanto à lotação do delegado André David concentrou debates na imprensa regional e comentários no meio político.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIRECIONAMENTOS SECOM -->
+      <div class="card">
+        <div>
+          <div class="section-title-wrap">
+            <span class="section-icon">🎯</span>
+            <div>
+              <h2 class="section-h2">Direcionamentos & Ações Táticas (SECOM)</h2>
+              <p class="section-sub">Recomendações prioritárias de comunicação institucional</p>
+            </div>
+          </div>
+
+          <div class="bullet-list">
+            <div class="bullet-item">
+              <span class="bullet-icon-mag">1.</span>
+              <span><strong>Comunicação Preventiva de Saneamento:</strong> Intensificar a divulgação do cronograma de manutenções e reparos da rede hídrica nas rádios locais e redes sociais para antecipar respostas a ouvintes.</span>
+            </div>
+            <div class="bullet-item">
+              <span class="bullet-icon-mag">2.</span>
+              <span><strong>Potencialização do Complexo Viário:</strong> Veicular vídeos com tomadas aéreas e depoimentos de motoristas evidenciando a fluidez no trânsito após a inauguração da 2ª alça do viaduto.</span>
+            </div>
+            <div class="bullet-item">
+              <span class="bullet-icon-mag">3.</span>
+              <span><strong>Passo a Passo de Vagas GO Sergipe:</strong> Lançar carrossel informativo e reels orientando a população sobre o cadastro digital para as 521 vagas de emprego da SEDETEC.</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--ind-3);">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--neg); display: block; margin-bottom: 6px;">
+            🚨 Ponto de Atenção em Monitoramento Contínuo:
+          </span>
+          <p style="font-size: 12px; background-color: rgba(255, 0, 90, 0.15); padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 0, 90, 0.35); color: #FFF;">
+            Acompanhar comentários no interior sobre o fornecimento de água para preservar a avaliação positiva da gestão e garantir respostas operacionais rápidas aos cidadãos.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SEÇÃO 3: DESTAQUES DE BROADCAST (RÁDIOS ORDENADAS POR OUVINTES E TELEVISÃO) -->
+    <section class="card" id="secao-broadcast">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--ind-3);">
+        <div class="section-title-wrap" style="margin-bottom: 0;">
+          <span class="section-icon">🎙️</span>
+          <div>
+            <h2 class="section-h2">Destaques da Radiodifusão & Televisão</h2>
+            <p class="section-sub">
+              Emissoras de rádio ordenadas por audiência estimada e praça de cobertura, acompanhadas dos registros televisivos com reprodutor de mídia e síntese executiva.
+            </p>
+          </div>
+        </div>
+        <span class="badge badge-channel">Top 10 Veiculações Multimídia (5 Rádios + 5 TVs)</span>
+      </div>
+
+      <!-- SUBSEÇÃO RÁDIOS -->
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <h3 style="font-size: 13px; font-weight: 800; color: #FFF; display: flex; align-items: center; gap: 8px;">
+            📻 Emissoras de Rádio Regionais <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">(Ordenadas por Audiência Estimada)</span>
+          </h3>
+          <span style="font-size: 11px; color: var(--cy); font-weight: 700;">Top 5 emissoras por audiência</span>
+        </div>
+
+        <div class="bcast-grid">
+          
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-channel">📻 Rádio Broadcast</span>
+                <span class="badge" style="background-color: rgba(0, 243, 255, 0.12); color: var(--cy); border: 1px solid rgba(0, 243, 255, 0.35);">👥 45.800 ouvintes est.</span>
+                <span class="badge badge-sec">📍 Aracaju · Capital e Grande Aracaju</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 13:28</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Rede CBN Sergipe (90.5 FM) <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Giro Esportivo e Econômico</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Transmissão jornalística e esportiva da rede CBN veiculando informe técnico sobre o emprego de insumos minerais e matérias-primas na cadeia industrial automotiva, seguida de giro dinâmico sobre competições regionais de futebol e patrocínios do setor produtivo.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <audio controls class="audio-native" preload="none" src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681bea6563de81e1f4366050/681bea6563de81e1f4366050_1792600100.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b822df3d374e10fd6597d4078dc8959607ab3310cd82092f6f1a9ff45e94591c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681bea6563de81e1f4366050/681bea6563de81e1f4366050_1792600100.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b822df3d374e10fd6597d4078dc8959607ab3310cd82092f6f1a9ff45e94591c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg">
+                Seu navegador não suporta reprodução direta.
+              </audio>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681bea6563de81e1f4366050/681bea6563de81e1f4366050_1792600100.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b822df3d374e10fd6597d4078dc8959607ab3310cd82092f6f1a9ff45e94591c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Áudio em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da veiculação: <strong>00:00:30</strong></span>
+            <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681bea6563de81e1f4366050/681bea6563de81e1f4366050_1792600100.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b822df3d374e10fd6597d4078dc8959607ab3310cd82092f6f1a9ff45e94591c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Áudio Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-channel">📻 Rádio Broadcast</span>
+                <span class="badge" style="background-color: rgba(0, 243, 255, 0.12); color: var(--cy); border: 1px solid rgba(0, 243, 255, 0.35);">👥 39.200 ouvintes est.</span>
+                <span class="badge badge-sec">📍 Aracaju · Metropolitana e Litoral</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 11:49</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Rádio Fan FM (99.7 FM) <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Mobilidade &amp; Tecnologia</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Veiculação em emissora de rádio FM regional com informe de mobilidade urbana, ressaltando o avanço na oferta de veículos com tecnologia híbrida e motores inteligentes, destacando ganhos em sustentabilidade, conforto e redução de emissões no trânsito urbano.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <audio controls class="audio-native" preload="none" src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681beb2e63de81e1f4366116/681beb2e63de81e1f4366116_1792594164.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=ebf7df957e697a930fe5ffc58b0261c4d4faa1973f12ee81609803a9853edd5d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681beb2e63de81e1f4366116/681beb2e63de81e1f4366116_1792594164.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=ebf7df957e697a930fe5ffc58b0261c4d4faa1973f12ee81609803a9853edd5d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg">
+                Seu navegador não suporta reprodução direta.
+              </audio>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681beb2e63de81e1f4366116/681beb2e63de81e1f4366116_1792594164.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=ebf7df957e697a930fe5ffc58b0261c4d4faa1973f12ee81609803a9853edd5d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Áudio em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da veiculação: <strong>00:00:30</strong></span>
+            <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/681beb2e63de81e1f4366116/681beb2e63de81e1f4366116_1792594164.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=ebf7df957e697a930fe5ffc58b0261c4d4faa1973f12ee81609803a9853edd5d&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Áudio Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-channel">📻 Rádio Broadcast</span>
+                <span class="badge" style="background-color: rgba(0, 243, 255, 0.12); color: var(--cy); border: 1px solid rgba(0, 243, 255, 0.35);">👥 31.500 ouvintes est.</span>
+                <span class="badge badge-sec">📍 Itabaiana · Regional (Agreste Sergipano)</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 11:43</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Rádio FM Sergipe (105.9 FM) <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Debate &amp; Crônica Esportiva</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Debate esportivo em estúdio analisando a preparação tática, foco e intensidade das equipes em partidas decisivas de torneios sul-americanos, enfatizando a cobrança dos torcedores por comprometimento e planejamento das comissões técnicas.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <audio controls class="audio-native" preload="none" src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a20b7820bb45e352d838/66d4a20b7820bb45e352d838_1792593833.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=82d5c69d2576fa51fc0adfd04c2058f909484335d29e6add15f585c4139963ad&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a20b7820bb45e352d838/66d4a20b7820bb45e352d838_1792593833.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=82d5c69d2576fa51fc0adfd04c2058f909484335d29e6add15f585c4139963ad&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg">
+                Seu navegador não suporta reprodução direta.
+              </audio>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a20b7820bb45e352d838/66d4a20b7820bb45e352d838_1792593833.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=82d5c69d2576fa51fc0adfd04c2058f909484335d29e6add15f585c4139963ad&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Áudio em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da veiculação: <strong>00:00:30</strong></span>
+            <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a20b7820bb45e352d838/66d4a20b7820bb45e352d838_1792593833.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=82d5c69d2576fa51fc0adfd04c2058f909484335d29e6add15f585c4139963ad&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Áudio Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-channel">📻 Rádio Broadcast</span>
+                <span class="badge" style="background-color: rgba(0, 243, 255, 0.12); color: var(--cy); border: 1px solid rgba(0, 243, 255, 0.35);">👥 26.400 ouvintes est.</span>
+                <span class="badge badge-sec">📍 Aracaju · Estadual / Metropolitana</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 11:34</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Rádio Jornal FM (91.3 FM) <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Panorama Institucional</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Cobertura de bastidores em evento público regional, registrando a concentração popular e a infraestrutura montada para o pronunciamento de lideranças políticas sobre propostas de desenvolvimento socioeconômico e interlocução comunitária.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <audio controls class="audio-native" preload="none" src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a09f7820bb45e352d79e/66d4a09f7820bb45e352d79e_1792593292.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=6efe2a9307b479c4ca7c8eddb9320db26090029abf258965ed026e4670bf9416&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a09f7820bb45e352d79e/66d4a09f7820bb45e352d79e_1792593292.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=6efe2a9307b479c4ca7c8eddb9320db26090029abf258965ed026e4670bf9416&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg">
+                Seu navegador não suporta reprodução direta.
+              </audio>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a09f7820bb45e352d79e/66d4a09f7820bb45e352d79e_1792593292.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=6efe2a9307b479c4ca7c8eddb9320db26090029abf258965ed026e4670bf9416&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Áudio em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da veiculação: <strong>00:00:30</strong></span>
+            <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d4a09f7820bb45e352d79e/66d4a09f7820bb45e352d79e_1792593292.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=6efe2a9307b479c4ca7c8eddb9320db26090029abf258965ed026e4670bf9416&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Áudio Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-channel">📻 Rádio Broadcast</span>
+                <span class="badge" style="background-color: rgba(0, 243, 255, 0.12); color: var(--cy); border: 1px solid rgba(0, 243, 255, 0.35);">👥 19.700 ouvintes est.</span>
+                <span class="badge badge-sec">📍 Lagarto · Regional (Centro-Sul Sergipano)</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 11:23</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Rádio Juventude FM (104.9 FM) <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Boletim de Negócios &amp; Frotas</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Giro informativo matinal em rádio FM abordando linhas de crédito e condições comerciais para aquisição e renovação de frotas de utilitários, essenciais para o transporte de cargas leves e logística comercial regional.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <audio controls class="audio-native" preload="none" src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/6571e71925281d9f185abfa2/6571e71925281d9f185abfa2_1792592626.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b809a2523fb0302a96a568e65b8d37ff55470a6197b4d37b386567ced277d018&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/6571e71925281d9f185abfa2/6571e71925281d9f185abfa2_1792592626.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b809a2523fb0302a96a568e65b8d37ff55470a6197b4d37b386567ced277d018&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="audio/mpeg">
+                Seu navegador não suporta reprodução direta.
+              </audio>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/6571e71925281d9f185abfa2/6571e71925281d9f185abfa2_1792592626.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b809a2523fb0302a96a568e65b8d37ff55470a6197b4d37b386567ced277d018&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Áudio em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da veiculação: <strong>00:00:30</strong></span>
+            <a href="https://palver-radios.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/6571e71925281d9f185abfa2/6571e71925281d9f185abfa2_1792592626.mp3?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=b809a2523fb0302a96a568e65b8d37ff55470a6197b4d37b386567ced277d018&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Áudio Original ↗</a>
+          </div>
+        </div>
+        
+        </div>
+      </div>
+
+      <!-- SUBSEÇÃO TELEVISÃO -->
+      <div style="padding-top: 16px; border-top: 1px solid var(--ind-3);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <h3 style="font-size: 13px; font-weight: 800; color: #FFF; display: flex; align-items: center; gap: 8px;">
+            📺 Cobertura em Telejornais <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">(Principais Veiculações Estaduais)</span>
+          </h3>
+          <span style="font-size: 11px; color: var(--mag); font-weight: 700;">Top 5 matérias televisivas</span>
+        </div>
+
+        <div class="bcast-grid">
+          
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background-color: var(--ind-deep); color: var(--mag); border: 1px solid rgba(255,0,90,0.4);">📺 Televisão</span>
+                <span class="badge badge-sec">📍 Aracaju · Cobertura Estadual</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 13:24</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Telejornal Econômico <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Painel de Produtividade &amp; Mercados</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Análise econômica em bancada de telejornal discutindo os entraves históricos da produtividade industrial no país, a elevação do risco produtivo e o impacto direto do encarecimento dos custos operacionais na competitividade das empresas brasileiras.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <video controls class="video-native" preload="metadata" playsinline src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599884.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7b10257227f22bb2e2d6b2416e112dfb696bca7a2321d85088be71e401baac7c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599884.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7b10257227f22bb2e2d6b2416e112dfb696bca7a2321d85088be71e401baac7c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="video/mp4">
+                Seu navegador não suporta reprodução direta.
+              </video>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599884.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7b10257227f22bb2e2d6b2416e112dfb696bca7a2321d85088be71e401baac7c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Vídeo em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da reportagem: <strong>120.0</strong></span>
+            <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599884.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7b10257227f22bb2e2d6b2416e112dfb696bca7a2321d85088be71e401baac7c&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Vídeo Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background-color: var(--ind-deep); color: var(--mag); border: 1px solid rgba(255,0,90,0.4);">📺 Televisão</span>
+                <span class="badge badge-sec">📍 Aracaju · Cobertura Estadual</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 13:20</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Telejornal de Análise Política <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Gestão Fiscal &amp; Contas Públicas</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Debate em telejornal sobre responsabilidade fiscal e a urgência de medidas de controle de gastos no setor público, pontuando que o equilíbrio orçamentário dos entes governamentais exige modernização administrativa aliada à eficiência no custeio.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <video controls class="video-native" preload="metadata" playsinline src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599644.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=d3f1fd788ddb4658de0a7fa89b0dd13b5e312f99cc1f179861b76ff1e5c58778&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599644.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=d3f1fd788ddb4658de0a7fa89b0dd13b5e312f99cc1f179861b76ff1e5c58778&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="video/mp4">
+                Seu navegador não suporta reprodução direta.
+              </video>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599644.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=d3f1fd788ddb4658de0a7fa89b0dd13b5e312f99cc1f179861b76ff1e5c58778&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Vídeo em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da reportagem: <strong>120.0</strong></span>
+            <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/67f7e4a43c510d31694ae868/67f7e4a43c510d31694ae868_1792599644.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=d3f1fd788ddb4658de0a7fa89b0dd13b5e312f99cc1f179861b76ff1e5c58778&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Vídeo Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background-color: var(--ind-deep); color: var(--mag); border: 1px solid rgba(255,0,90,0.4);">📺 Televisão</span>
+                <span class="badge badge-sec">📍 Aracaju · Cobertura Estadual</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 13:16</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Telejornal Notícias do Dia <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Cenário Político &amp; Congresso</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Comentário político de estúdio abordando a tramitação de propostas de emenda constitucional no Congresso Nacional sobre a escala de trabalho, avaliando o ambiente de articulação na reta final das sessões legislativas e seus efeitos orçamentários.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <video controls class="video-native" preload="metadata" playsinline src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792599387.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7aa36d51493fdc7bd3339b3e2b7515763f811375c6766416d6b9f7f4653d3e72&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792599387.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7aa36d51493fdc7bd3339b3e2b7515763f811375c6766416d6b9f7f4653d3e72&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="video/mp4">
+                Seu navegador não suporta reprodução direta.
+              </video>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792599387.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7aa36d51493fdc7bd3339b3e2b7515763f811375c6766416d6b9f7f4653d3e72&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Vídeo em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da reportagem: <strong>120.120122</strong></span>
+            <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792599387.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=7aa36d51493fdc7bd3339b3e2b7515763f811375c6766416d6b9f7f4653d3e72&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Vídeo Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background-color: var(--ind-deep); color: var(--mag); border: 1px solid rgba(255,0,90,0.4);">📺 Televisão</span>
+                <span class="badge badge-sec">📍 Aracaju · Cobertura Estadual</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 13:03</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Telejornal Policial &amp; Cidades <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Segurança Pública &amp; Policiamento</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Reportagem policial de telejornal registrando a pronta intervenção das forças de segurança pública diante de ocorrência patrimonial em estabelecimento hoteleiro, evidenciando as ações integradas de patrulhamento para proteção da população e de visitantes.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <video controls class="video-native" preload="metadata" playsinline src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d3443387df38743c9c80d2/66d3443387df38743c9c80d2_1792598588.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=77a29fefcfe042895edb36a0fec71ce00205f4d1c327981cf9da2471cdc74f57&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d3443387df38743c9c80d2/66d3443387df38743c9c80d2_1792598588.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=77a29fefcfe042895edb36a0fec71ce00205f4d1c327981cf9da2471cdc74f57&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="video/mp4">
+                Seu navegador não suporta reprodução direta.
+              </video>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d3443387df38743c9c80d2/66d3443387df38743c9c80d2_1792598588.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=77a29fefcfe042895edb36a0fec71ce00205f4d1c327981cf9da2471cdc74f57&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Vídeo em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da reportagem: <strong>120.119989</strong></span>
+            <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/66d3443387df38743c9c80d2/66d3443387df38743c9c80d2_1792598588.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=77a29fefcfe042895edb36a0fec71ce00205f4d1c327981cf9da2471cdc74f57&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Vídeo Original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="bcast-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;">
+              <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <span class="badge" style="background-color: var(--ind-deep); color: var(--mag); border: 1px solid rgba(255,0,90,0.4);">📺 Televisão</span>
+                <span class="badge badge-sec">📍 Aracaju · Cobertura Estadual</span>
+              </div>
+              <span style="font-size: 11px; color: var(--lav-2);">21/10/2026 às 12:28</span>
+            </div>
+
+            <h3 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 4px;">
+              Telejornal de Negócios <span style="font-size: 11px; font-weight: 500; color: var(--lav-2);">· Inovação &amp; Comércio Varejista</span>
+            </h3>
+
+            <div class="content-summary-box bcast-summary">
+              <span class="summary-badge">Síntese</span>
+              <p class="content-summary-text">Noticiário corporativo detalhando movimentações no mercado privado de adquirência e iniciativas para redução de taxas cartões em pequenos comércios e restaurantes, aguardando pareceres técnicos dos órgãos de regulação econômica.</p>
+            </div>
+
+            
+            <div class="player-box">
+              <video controls class="video-native" preload="metadata" playsinline src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792596507.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=09e04a07180d7a2d7e3441a12b6ff1ea0337414c5a3468c7d54be60c69884632&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject">
+                <source src="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792596507.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=09e04a07180d7a2d7e3441a12b6ff1ea0337414c5a3468c7d54be60c69884632&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" type="video/mp4">
+                Seu navegador não suporta reprodução direta.
+              </video>
+              <div style="margin-top: 8px; text-align: right;">
+                <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792596507.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=09e04a07180d7a2d7e3441a12b6ff1ea0337414c5a3468c7d54be60c69884632&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="btn-play-external">▶ Reproduzir Vídeo em Nova Guia ↗</a>
+              </div>
+            </div>
+            
+          </div>
+
+          <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--lav-2);">
+            <span>Duração da reportagem: <strong>120.120122</strong></span>
+            <a href="https://palver-television-rotation.a151cac41de8d129e246200bf7005d56.r2.cloudflarestorage.com/2026-10-21/69dfec78d8ad549dc6220d5b/69dfec78d8ad549dc6220d5b_1792596507.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=95b176d5a88db2458e76f173515adc10%2F20261021%2Fwnam%2Fs3%2Faws4_request&X-Amz-Date=20261021T174440Z&X-Amz-Expires=604800&X-Amz-Signature=09e04a07180d7a2d7e3441a12b6ff1ea0337414c5a3468c7d54be60c69884632&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject" target="_blank" rel="noopener noreferrer" class="link-original-btn">▶ Vídeo Original ↗</a>
+          </div>
+        </div>
+        
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4: RADAR DE ENGAJAMENTO POPULAR & ANÁLISE QUALITATIVA DE COMENTÁRIOS -->
+    
+    <!-- ==========================================================================
+         SEÇÃO ESPECIAL: RADAR DE ENGAJAMENTO POPULAR & ANÁLISE DE COMENTÁRIOS
+         Amostra Representativa com Base de Conhecimento e Emojis
+         ========================================================================== -->
+    <section class="card" id="secao-comentarios-sociais" style="margin-top: 18px; border: 1px solid var(--ind-4);">
+      
+      <!-- CABEÇALHO DA SEÇÃO DE COMENTÁRIOS -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ind-3);">
+        <div class="section-title-wrap" style="margin-bottom: 0;">
+          <span class="section-icon" style="background-color: rgba(0, 243, 255, 0.15); border: 1px solid rgba(0, 243, 255, 0.4); color: var(--cy);">💬</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h2 class="section-h2" style="font-size: 14px;">Radar de Engajamento Popular · Análise Qualitativa de Comentários</h2>
+            </div>
+            <p class="section-sub">
+              Amostra representativa com <strong>317 comentários reais</strong> coletados nos perfis oficiais do <strong>Governador Fábio Mitidieri</strong> e do <strong>Governo de Sergipe</strong> (Redes Sociais).
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span class="badge badge-channel">Redes Sociais Oficiais</span>
+        </div>
+      </div>
+
+      <!-- 4 CARDS DE INDICADORES CHAVE (KPIS DA AMOSTRA) -->
+      <div class="kpi-grid" style="margin-bottom: 16px; gap: 12px;">
+        
+        <!-- CARD 1: VOLUME & DIVISÃO ESTRUTURAL -->
+        <div style="background-color: var(--ind-d); border: 1px solid var(--ind-3); border-radius: 14px; padding: 12px 14px;">
+          <span class="card-label">Amostra Representativa</span>
+          <div class="kpi-big" style="font-size: 22px; color: #FFF;">
+            317 <span class="kpi-unit">comentários</span>
+          </div>
+          <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 3px; font-size: 10.5px; color: var(--lav-2);">
+            <div style="display: flex; justify-content: space-between;">
+              <span>📝 Conteúdo Escrito:</span>
+              <strong style="color: #FFF;">239 (75.4%)</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>✨ Emojis & Siglas:</span>
+              <strong style="color: var(--cy);">78 (24.6%)</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: BALANÇO DE SENTIMENTO -->
+        <div style="background-color: var(--ind-d); border: 1px solid var(--ind-3); border-radius: 14px; padding: 12px 14px;">
+          <span class="card-label">Balanço de Percepção</span>
+          <div style="display: flex; gap: 6px; margin-top: 3px; font-weight: 700; font-size: 12px;">
+            <span style="color: var(--pos);">52.4% Pos</span>
+            <span style="color: var(--neg);">23.3% Neg</span>
+            <span style="color: var(--neu);">24.3% Neu</span>
+          </div>
+          <div style="margin-top: 8px; height: 6px; background-color: var(--ind-2); border-radius: 999px; overflow: hidden; display: flex;">
+            <div style="width: 52.4%; background-color: var(--pos);" title="Positivo"></div>
+            <div style="width: 23.3%; background-color: var(--neg);" title="Negativo"></div>
+            <div style="width: 24.3%; background-color: var(--neu);" title="Neutro"></div>
+          </div>
+          <div style="margin-top: 6px; font-size: 10px; color: var(--lav-2); display: flex; justify-content: space-between;">
+            <span>🟢 166 Apoio</span>
+            <span>🔴 74 Negativo</span>
+            <span>🟡 77 Neutro</span>
+          </div>
+        </div>
+
+        <!-- CARD 3: SALDO LÍQUIDO DE APROVAÇÃO -->
+        <div style="background-color: var(--ind-d); border: 1px solid var(--ind-3); border-radius: 14px; padding: 12px 14px;">
+          <span class="card-label">Saldo Líquido Popular</span>
+          <div class="kpi-big" style="font-size: 22px; color: var(--pos);">
+            +29.0%
+          </div>
+          <p style="font-size: 10.5px; color: var(--lav-2); margin-top: 4px; line-height: 1.35;">
+            <strong>+92 manifestações favoráveis líquidas</strong>. Predominância de entusiasmo cívico e engajamento favorável nos atos da gestão.
+          </p>
+        </div>
+
+        <!-- CARD 4: FOCO DE FRICÇÃO & DEMANDAS -->
+        <div style="background-color: var(--ind-d); border: 1px solid var(--ind-3); border-radius: 14px; padding: 12px 14px;">
+          <span class="card-label">Vetor Negativo & Cobranças</span>
+          <div class="kpi-big" style="font-size: 22px; color: var(--neg);">
+            74 <span class="kpi-unit">alertas</span>
+          </div>
+          <div style="margin-top: 6px; font-size: 10.5px; color: var(--lav-2); display: flex; flex-direction: column; gap: 2px;">
+            <div>💧 <strong>28 queixas de serviços</strong> (DESO/Iguá e SEDUC)</div>
+            <div>⚡ <strong>45 contraposições</strong> de disputa política</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PAINEL COMPARATIVO DE ESTRUTURA: CONTEÚDO ESCRITO vs. EMOJIS & SIGLAS -->
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 16px;" class="two-cols-grid">
+        
+        <!-- COLUNA 1: COMENTÁRIOS COM CONTEÚDO ESCRITO -->
+        <div style="background-color: var(--ind-2); border: 1px solid var(--ind-3); border-radius: 16px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ind-3);">
+            <div>
+              <h3 style="font-size: 12.5px; font-weight: 700; color: #FFF;">📝 Comentários com Conteúdo Escrito</h3>
+              <p style="font-size: 10px; color: var(--lav-2);">Reclamações, elogios elaborados, pedidos de socorro e debates</p>
+            </div>
+            <span class="badge" style="background-color: var(--ind-d); color: #FFF; font-size: 10px;">
+              239 (75.4%)
+            </span>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Mobilização & Voto 13</span>
+            <span style="color: #FFF; font-weight: bold;">76 (31.8%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 31.8%; background-color: var(--pos); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Contraposição / Voto 22</span>
+            <span style="color: #FFF; font-weight: bold;">34 (14.2%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 14.2%; background-color: var(--neg); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Cobranças de Serviços (DESO/SEDUC/Obras)</span>
+            <span style="color: #FFF; font-weight: bold;">28 (11.7%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 11.7%; background-color: var(--mag); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Elogios & Fortalecimento da Gestão</span>
+            <span style="color: #FFF; font-weight: bold;">18 (7.5%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 7.5%; background-color: var(--cy); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Votos de Bênção & Fé</span>
+            <span style="color: #FFF; font-weight: bold;">5 (2.1%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 2.1%; background-color: var(--lav); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Informativos, Menções & Dúvidas</span>
+            <span style="color: #FFF; font-weight: bold;">49 (20.5%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 20.5%; background-color: var(--neu); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+          </div>
+
+          <div style="background-color: rgba(29, 27, 94, 0.5); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ind-4); font-size: 10.5px; color: var(--ice); line-height: 1.4;">
+            <strong>📌 Diagnóstico Analítico:</strong> Os comentários escritos concentram as principais <em>demandas de serviços públicos</em> (especialmente falta de água na DESO/Iguá e questionamentos ao Prêmio Nota 10 da SEDUC), além de expressiva polarização partidária.
+          </div>
+        </div>
+
+        <!-- COLUNA 2: COMENTÁRIOS COM EMOJIS & SIGLAS -->
+        <div style="background-color: var(--ind-2); border: 1px solid var(--ind-3); border-radius: 16px; padding: 14px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--ind-3);">
+            <div>
+              <h3 style="font-size: 12.5px; font-weight: 700; color: #FFF;">✨ Comentários com Emojis & Siglas</h3>
+              <p style="font-size: 10px; color: var(--lav-2);">Decodificação semiótica contextual e reações visuais puras</p>
+            </div>
+            <span class="badge" style="background-color: var(--ind-d); color: var(--cy); font-size: 10px;">
+              78 (24.6%)
+            </span>
+          </div>
+
+          <div style="margin-bottom: 12px;">
+            
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Aprovação, Aplausos & Corações (👏, ❤️, 🇧🇷❤️)</span>
+            <span style="color: #FFF; font-weight: bold;">38 (48.7%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 48.7%; background-color: var(--pos); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Interação Visual Simples / Neutra (🙏, 👀, 💪)</span>
+            <span style="color: #FFF; font-weight: bold;">24 (30.8%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 30.8%; background-color: var(--neu); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Contraposição Política / Oposição (22, 2️⃣2️⃣)</span>
+            <span style="color: #FFF; font-weight: bold;">8 (10.3%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 10.3%; background-color: var(--neg); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Alinhamento Eleitoral / Mobilização (13, 1313)</span>
+            <span style="color: #FFF; font-weight: bold;">7 (9.0%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 9.0%; background-color: var(--cy); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+
+        <div style="margin-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 3px;">
+            <span style="color: var(--ice); font-weight: 600;">Desaprovação Visual / Repulsa (🤮)</span>
+            <span style="color: #FFF; font-weight: bold;">1 (1.3%)</span>
+          </div>
+          <div style="height: 6px; background-color: var(--ind-d); border-radius: 999px; overflow: hidden; border: 1px solid var(--ind-4);">
+            <div style="height: 100%; width: 1.3%; background-color: var(--mag); border-radius: 999px;"></div>
+          </div>
+        </div>
+        
+          </div>
+
+          <!-- Matriz Semiótica Rápida -->
+          <div style="background-color: rgba(29, 27, 94, 0.5); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ind-4); font-size: 10.5px; color: var(--ice); line-height: 1.4;">
+            <strong>📌 Gramática Semiótica de Classificação:</strong>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 5px; font-size: 10px;">
+              <div>• <code>🇧🇷❤️</code>: Civismo & Afeto (🟢)</div>
+              <div>• <code>👏👏👏👏</code>: Congratulação (🟢)</div>
+              <div>• <code>❤️❤️❤️❤️</code>: Afeto Direto (🟢)</div>
+              <div>• <code>1313❤️❤️</code>: Aliança de Urna (🟢)</div>
+              <div>• <code>22 / 2️⃣2️⃣</code>: Oposição ao Post (🔴)</div>
+              <div>• <code>🤢 / 🤮</code>: Repulsa Visual (🔴)</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+    
+
+    <!-- SEÇÃO 5: FEED DE DESTAQUES DE ALTA REPERCUSSÃO -->
+    <section id="secao-feed-mencoes" style="display: flex; flex-direction: column; gap: 20px;">
+      
+      <!-- FILTROS & PESQUISA DE ALTA REPERCUSSÃO -->
+      <div class="filter-card no-print">
+        <div class="filter-row-top">
+          <div>
+            <h2 class="section-h2" style="font-size: 14px;">Feed de Destaques de Repercussão & Fatos Relevantes</h2>
+            <p class="section-sub">Seleção executiva dos fatos de maior repercussão, audiência e engajamento nas últimas 24 horas</p>
+          </div>
+
+          <div class="search-wrapper">
+            <input type="text" id="campo-busca" oninput="buscar()" placeholder="Buscar por termo, autor ou tema..." class="search-input">
+            <span class="search-icon">🔎</span>
+          </div>
+        </div>
+
+        <div class="filter-groups">
+          <!-- Filtro por Canal -->
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--lav-2); margin-right: 4px;">Canal:</span>
+            <button onclick="filtrarCanal('todos')" id="btn-c-todos" class="btn-filter active-canal">
+              Todos (10)
+            </button>
+            <button onclick="filtrarCanal('social')" id="btn-c-social" class="btn-filter">
+              📱 Redes Sociais (5)
+            </button>
+            <button onclick="filtrarCanal('noticia')" id="btn-c-noticia" class="btn-filter">
+              📰 Notícias (5)
+            </button>
+          </div>
+
+          <!-- Filtro por Sentimento -->
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--lav-2); margin-right: 4px;">Sentimento:</span>
+            <button onclick="filtrarSentimento('todos')" id="btn-s-todos" class="btn-filter active-sent">
+              Todos
+            </button>
+            <button onclick="filtrarSentimento('positivo')" id="btn-s-positivo" class="btn-filter" style="color: var(--pos);">
+              🟢 Positivo (8)
+            </button>
+            <button onclick="filtrarSentimento('negativo')" id="btn-s-negativo" class="btn-filter" style="color: var(--neg);">
+              🔴 Negativo (0)
+            </button>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--lav-2); padding-top: 8px; border-top: 1px solid rgba(77, 75, 158, 0.4);">
+          <span>Exibindo <strong id="contador-visivel" style="color: #FFF;">10</strong> fatos de maior repercussão (5 em Redes Sociais + 5 em Notícias)</span>
+          <span style="font-style: italic;">Acesso direto à publicação original</span>
+        </div>
+      </div>
+
+      <!-- GRID DOS CARDS DE MENÇÃO -->
+      <div id="grid-mencoes" class="mencoes-grid">
+        
+        <div class="mencao-card" data-tipo="instagram" data-sentimento="positivo" data-id="redes_392">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📸 Instagram</span>
+                  <span class="badge badge-sec">SETUR</span>
+                  <span class="badge badge-gov-pos">⭐ Vetor Governamental</span>
+                </div>
+                <h3 class="author-title">
+                  fabiogov55 
+                </h3>
+                <span class="post-time">20/10/2026 às 21:47</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">O Governador destaca a oferta de centenas de novas oportunidades de trabalho na plataforma GO Sergipe e incentivos à qualificação profissional.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>99,1 mil</strong></span>
+              <span>Engajamento: <strong>4,8 mil</strong></span>
+              
+            </div>
+            <a href="https://www.instagram.com/reel/Deu07J5PAIf/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="instagram" data-sentimento="positivo" data-id="redes_626">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📸 Instagram</span>
+                  <span class="badge badge-sec">SECOM/GOV</span>
+                  <span class="badge badge-gov-pos">⭐ Vetor Governamental</span>
+                </div>
+                <h3 class="author-title">
+                  deplucianobispo 
+                </h3>
+                <span class="post-time">20/10/2026 às 17:35</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Manifestação pública de cidadãos em apoio à liderança do Governador Fábio Mitidieri e incentivo à continuidade das ações do governo.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>54,0 mil</strong></span>
+              <span>Engajamento: <strong>2,5 mil</strong></span>
+              
+            </div>
+            <a href="https://www.instagram.com/p/DeuYa-wtGWI/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="instagram" data-sentimento="positivo" data-id="redes_341">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📸 Instagram</span>
+                  <span class="badge badge-sec">SECOM/GOV</span>
+                  <span class="badge badge-gov-pos">⭐ Vetor Governamental</span>
+                </div>
+                <h3 class="author-title">
+                  chicodocorreio13 
+                </h3>
+                <span class="post-time">20/10/2026 às 23:07</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Manifestação pública de cidadãos em apoio à liderança do Governador Fábio Mitidieri e incentivo à continuidade das ações do governo.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>27,2 mil</strong></span>
+              <span>Engajamento: <strong>1,2 mil</strong></span>
+              
+            </div>
+            <a href="https://www.instagram.com/p/Deu-XgnRTUT/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="instagram" data-sentimento="positivo" data-id="redes_527">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📸 Instagram</span>
+                  <span class="badge badge-sec">SECOM/GOV</span>
+                  <span class="badge badge-gov-pos">⭐ Vetor Governamental</span>
+                </div>
+                <h3 class="author-title">
+                  binhoprefeito 
+                </h3>
+                <span class="post-time">20/10/2026 às 19:11</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Manifestação pública de cidadãos em apoio à liderança do Governador Fábio Mitidieri e incentivo à continuidade das ações do governo.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>22,0 mil</strong></span>
+              <span>Engajamento: <strong>995</strong></span>
+              
+            </div>
+            <a href="https://www.instagram.com/p/DeujZiWuSQi/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="instagram" data-sentimento="positivo" data-id="redes_366">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📸 Instagram</span>
+                  <span class="badge badge-sec">SECOM/GOV</span>
+                  <span class="badge badge-gov-pos">⭐ Vetor Governamental</span>
+                </div>
+                <h3 class="author-title">
+                  prefeitogalego_ 
+                </h3>
+                <span class="post-time">20/10/2026 às 22:21</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Registro em rede social: &quot;Sexta-feira é dia de reunir nossa gente e caminhar pela vitória! 🇧🇷❤️ Nesta sexta-feira, dia 23, temos um grande encontro marcado...&quot;</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>14,1 mil</strong></span>
+              <span>Engajamento: <strong>587</strong></span>
+              
+            </div>
+            <a href="https://www.instagram.com/p/Deu48LftlSc/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="noticia" data-sentimento="neutro" data-id="redes_51">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📰 Notícia Online</span>
+                  <span class="badge badge-sec">SES/HUSE</span>
+                  
+                </div>
+                <h3 class="author-title">
+                  Brunna Mendes 
+                </h3>
+                <span class="post-time">21/10/2026 às 14:45</span>
+              </div>
+              <span class="badge-sentiment badge-neu">🟡 Neutro</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Registro em rede social: &quot;Nove medicamentos contra o câncer chegam ao SUS para atender mais de 116 mil pacientes; veja a lista. ...acompanhamento de...&quot;</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>13</strong></span>
+              
+              
+            </div>
+            <a href="https://portaln10.com.br/brasil/nove-medicamentos-contra-o-cancer-chegam-ao-sus-para-atender-mais-de-116-mil-pacientes-veja-a-lista-355793/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="noticia" data-sentimento="neutro" data-id="redes_49">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📰 Notícia Online</span>
+                  <span class="badge badge-sec">SEMAC</span>
+                  
+                </div>
+                <h3 class="author-title">
+                  Ritta 
+                </h3>
+                <span class="post-time">21/10/2026 às 14:49</span>
+              </div>
+              <span class="badge-sentiment badge-neu">🟡 Neutro</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Registro em rede social: &quot;Fundação Renascer celebra 50 anos com espetáculo no Teatro Atheneu. ...a participação de 15 socioeducandos, a apresentação...&quot;</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>4</strong></span>
+              
+              
+            </div>
+            <a href="https://roacontece.com.br/2026/10/21/fundacao-renascer-celebra-50-anos-com-espetaculo-no-teatro-atheneu/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="noticia" data-sentimento="positivo" data-id="redes_1">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📰 Notícia Online</span>
+                  <span class="badge badge-sec">SEDETEC</span>
+                  
+                </div>
+                <h3 class="author-title">
+                  senoticias.com.br 
+                </h3>
+                <span class="post-time">21/10/2026 às 16:57</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Divulgação de novas vagas de emprego formal e capacitação profissional intermediadas pelo NAT/SEDETEC em Sergipe.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>1</strong></span>
+              
+              
+            </div>
+            <a href="https://senoticias.com.br/se/plataforma-go-sergipe-oferta-521-vagas-de-emprego-nesta-quarta-feira-21/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="noticia" data-sentimento="positivo" data-id="redes_4">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📰 Notícia Online</span>
+                  <span class="badge badge-sec">SEDURBI/DER</span>
+                  
+                </div>
+                <h3 class="author-title">
+                  senoticias.com.br 
+                </h3>
+                <span class="post-time">21/10/2026 às 16:53</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Repercussão positiva sobre a entrega da 2ª alça do viaduto da Maria do Carmo Alves, com melhoria no escoamento viário.</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>1</strong></span>
+              
+              
+            </div>
+            <a href="https://senoticias.com.br/se/governo-de-sergipe-entrega-a-segunda-alca-do-complexo-viario-senadora-maria-do-carmo-alves-nesta-quinta-feira-22/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+
+        <div class="mencao-card" data-tipo="noticia" data-sentimento="positivo" data-id="redes_39">
+          <div class="card-main">
+            <div class="card-top">
+              <div class="card-meta">
+                <div class="meta-tags">
+                  <span class="badge badge-channel">📰 Notícia Online</span>
+                  <span class="badge badge-sec">DESO/IGUÁ</span>
+                  
+                </div>
+                <h3 class="author-title">
+                  Adeval Marques 
+                </h3>
+                <span class="post-time">21/10/2026 às 15:32</span>
+              </div>
+              <span class="badge-sentiment badge-pos">🟢 Positivo</span>
+            </div>
+
+            
+        <div class="content-summary-box">
+          <span class="summary-badge">Resumo</span>
+          <p class="content-summary-text">Registro em rede social: &quot;Governo de Sergipe atua na gestão hídrica diante dos possíveis efeitos do El Niño. ...ferramentas do Governo de Sergipe no...&quot;</p>
+        </div>
+        
+          </div>
+
+          <div class="card-footer">
+            <div class="footer-metrics">
+              <span>Alcance Estimado: <strong>0</strong></span>
+              
+              
+            </div>
+            <a href="https://revistacaninde.com.br/governo-de-sergipe-atua-na-gestao-hidrica-diante-dos-possiveis-efeitos-do-el-nino/" target="_blank" rel="noopener noreferrer" class="link-original-btn">🔗 Acessar link original ↗</a>
+          </div>
+        </div>
+        
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- RODAPÉ INSTITUCIONAL -->
+  <footer class="page-footer">
+    <div class="footer-flex">
+      <div>
+        <p style="font-size: 12px; font-weight: 800; color: #FFFFFF;">
+          Radar Diário de Reputação · Governo do Estado de Sergipe
+        </p>
+        <p style="margin-top: 4px; color: var(--lav-2);">
+          Sistema Integrado de Inteligência de Comunicação & Monitoramento Multimodal
+        </p>
+        <p style="font-size: 10px; margin-top: 2px; color: rgba(185, 184, 224, 0.6);">
+          Metodologia IRG · Desenvolvido para a Secretaria de Estado da Comunicação Social (SECOM)
+        </p>
+      </div>
+      <div>
+        <img src="assets/logo-lagos.png" alt="Lagos Data Intelligence" style="height: 24px; width: auto; object-fit: contain;">
+      </div>
+    </div>
+  </footer>
+
+  </div>
+
+  <!-- SCRIPT DE FILTROS & BUSCA -->
+  <script>
+    let canalAtivo = 'todos';
+    let sentimentoAtivo = 'todos';
+
+    function atualizarFeed() {
+      const termo = (document.getElementById('campo-busca').value || '').toLowerCase().trim();
+      const cards = document.querySelectorAll('.mencao-card');
+      let visiveis = 0;
+
+      cards.forEach(card => {
+        const tipo = card.getAttribute('data-tipo');
+        const sent = card.getAttribute('data-sentimento');
+        const textoCard = card.innerText.toLowerCase();
+
+        const matchCanal = (canalAtivo === 'todos') || (tipo === canalAtivo) || (canalAtivo === 'social' && (tipo === 'instagram' || tipo === 'twitter' || tipo === 'facebook' || tipo === 'social'));
+        const matchSent = (sentimentoAtivo === 'todos') || (sent === sentimentoAtivo);
+        const matchTermo = !termo || textoCard.includes(termo);
+
+        if (matchCanal && matchSent && matchTermo) {
+          card.style.display = 'flex';
+          visiveis++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('contador-visivel').innerText = visiveis;
+    }
+
+    function filtrarCanal(canal) {
+      canalAtivo = canal;
+      document.querySelectorAll('.btn-filter').forEach(btn => {
+        if (btn.id.startsWith('btn-c-')) {
+          btn.classList.remove('active-canal');
+        }
+      });
+      const bAtivo = document.getElementById('btn-c-' + canal);
+      if (bAtivo) {
+        bAtivo.classList.add('active-canal');
+      }
+      atualizarFeed();
+    }
+
+    function filtrarSentimento(sent) {
+      sentimentoAtivo = sent;
+      document.querySelectorAll('.btn-filter').forEach(btn => {
+        if (btn.id.startsWith('btn-s-')) {
+          btn.classList.remove('active-sent');
+        }
+      });
+      const bAtivo = document.getElementById('btn-s-' + sent);
+      if (bAtivo) {
+        bAtivo.classList.add('active-sent');
+      }
+      atualizarFeed();
+    }
+
+    function buscar() {
+      atualizarFeed();
+    }
+  </script>
+
+</body>
+</html>
